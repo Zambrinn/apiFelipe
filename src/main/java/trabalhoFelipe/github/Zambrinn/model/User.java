@@ -8,7 +8,11 @@ import trabalhoFelipe.github.Zambrinn.model.DTOs.UserRole;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity // é uma entitdade
 @Table(name = "users")
@@ -42,4 +46,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role; // aqui eu criei um atributo que vem da classe UserEnum
     // esse role só pode ser: ADMIN ou USER
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Car> cars = new ArrayList<>();
 }
