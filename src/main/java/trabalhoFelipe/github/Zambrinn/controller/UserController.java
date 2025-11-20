@@ -29,12 +29,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(UUID id, @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @Valid @RequestBody UserRequest request) {
         return ResponseEntity.ok(userService.updateUser(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(UUID id) {
+    public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
     }
 }

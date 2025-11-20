@@ -72,6 +72,8 @@ public class UserService {
     public UserResponse convertUserToDTO(User user) {
         return new UserResponse(
                 user.getId(),
+                user.getName(),
+                user.getEmail(),
                 user.getCreatedAt()
         );
     }
