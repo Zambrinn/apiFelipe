@@ -10,19 +10,31 @@ import org.springframework.stereotype.Service;
 import trabalhoFelipe.github.Zambrinn.model.Car;
 import trabalhoFelipe.github.Zambrinn.model.DTOs.CarRequest;
 import trabalhoFelipe.github.Zambrinn.model.DTOs.CarResponse;
+import trabalhoFelipe.github.Zambrinn.model.User;
 import trabalhoFelipe.github.Zambrinn.repository.CarRepository;
+import trabalhoFelipe.github.Zambrinn.repository.UserRepository;
 
 @Service
 public class CarService {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public CarResponse createCar(CarRequest request) {
         Car car = Car.builder()
                 .year(request.year())
                 .brand(request.brand())
                 .model(request.model())
+                .status(request.status())
                 .build();
+
+        if (request.userId() != null) {
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        car.setUser(user);
+    }
 
         Car newCar = carRepository.save(car);
         return convertToDTO(newCar);
@@ -55,12 +67,21 @@ public class CarService {
         carRepository.delete(existingCar);
     }
 
+    public CarResponse findCarById(UUID id) {
+        Car existingCar = carRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possivel encontrar o carro com o id: " + id));
+
+        return convertToDTO(existingCar);
+    }
+
     public CarResponse convertToDTO(Car car) {
         return new CarResponse(
                 car.getId(),
                 car.getBrand(),
                 car.getModel(),
-                car.getYear()
+                car.getYear(),
+                car.getStatus(),
+                car.getUser() != null ? car.getUser().getId() : null
         );
     }
 
