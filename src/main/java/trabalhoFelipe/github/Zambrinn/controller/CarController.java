@@ -35,6 +35,11 @@ public class CarController {
         return ResponseEntity.ok(carService.getAllCars());
     }
 
+    @GetMapping("/{id}") 
+    public ResponseEntity<CarResponse> getCarById(@PathVariable UUID id) {
+        return ResponseEntity.ok(carService.findCarById(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CarResponse> updateCar(@PathVariable UUID id, @Valid @RequestBody CarRequest request) {
         return ResponseEntity.ok(carService.updateCar(id, request));
