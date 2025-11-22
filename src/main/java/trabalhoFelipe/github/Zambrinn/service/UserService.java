@@ -1,18 +1,17 @@
 package trabalhoFelipe.github.Zambrinn.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+
 import trabalhoFelipe.github.Zambrinn.model.DTOs.UserRequest;
 import trabalhoFelipe.github.Zambrinn.model.DTOs.UserResponse;
 import trabalhoFelipe.github.Zambrinn.model.User;
 import trabalhoFelipe.github.Zambrinn.repository.UserRepository;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -26,6 +25,7 @@ public class UserService {
                 .email(request.email()) // coloco no email do usuário o que foi pedido no request
                 .password(request.password()) // coloco no email do usuário o que foi pedido no request
                 .createdAt(LocalDateTime.now())
+                .role(request.role())
                 .build(); // crio o usuário
 
         User savedUser = userRepository.save(user);
@@ -68,13 +68,21 @@ public class UserService {
         userRepository.delete(existingUser);
     }
 
+    public UserResponse getUserById(UUID id) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Não existe usuário com o id" + id));
+
+        return convertUserToDTO(existingUser);
+    }
+
 
     public UserResponse convertUserToDTO(User user) {
         return new UserResponse(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getCreatedAt()
+                user.getCreatedAt(),
+                user.getCars()
         );
     }
 }
