@@ -1,0 +1,26 @@
+meta {
+  name: createCar
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/v1/cars
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2023,
+    "status": "NEW",
+    "userId": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
