@@ -19,27 +19,27 @@ public class CarService {
 
     public CarResponse createCar(CarRequest request) {
         Car car = Car.builder()
-        .year(request.year())
-        .brand(request.brand())
-        .model(request.model())
-        .build();
+                .year(request.year())
+                .brand(request.brand())
+                .model(request.model())
+                .build();
 
         Car newCar = carRepository.save(car);
         return convertToDTO(newCar);
-    }  
+    }
 
     public List<CarResponse> getAllCars() {
         return carRepository.findAll()
-        .stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     public CarResponse updateCar(UUID id, CarRequest request) {
         Car existingCar = carRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Não foi possivel encontrar o carro com o id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possivel encontrar o carro com o id: " + id));
 
-        
+
         existingCar.setBrand(request.brand());
         existingCar.setModel(request.model());
         existingCar.setYear(request.year());
@@ -50,17 +50,17 @@ public class CarService {
 
     public void deleteCar(UUID id) {
         Car existingCar = carRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Não foi possivel encontrar o carro com o id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possivel encontrar o carro com o id: " + id));
 
         carRepository.delete(existingCar);
     }
 
     public CarResponse convertToDTO(Car car) {
         return new CarResponse(
-          car.getId(),
-          car.getBrand(),
-          car.getModel(),
-          car.getYear()
+                car.getId(),
+                car.getBrand(),
+                car.getModel(),
+                car.getYear()
         );
     }
 
